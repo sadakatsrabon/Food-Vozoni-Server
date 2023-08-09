@@ -9,6 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect With MongoDB(NoSQL)
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.vwt8lkk.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -25,6 +26,15 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+
+    // send result
+    const menuCollection = client.db("FoodVozoniDB").collection("menu");
+    app.get('/menu', async (req, res) => {
+      const result = await menuCollection.find().toArray();
+      res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -38,10 +48,11 @@ run().catch(console.dir);
 
 
 
+
 app.get('/', (req, res) => {
-    res.send('Food is cooking')
+  res.send('Food is cooking')
 })
 
 app.listen(port, () => {
-    console.log(`Food is cooking on port ${port}`)
+  console.log(`Food is cooking on port ${port}`)
 })
