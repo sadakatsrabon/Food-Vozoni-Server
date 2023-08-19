@@ -30,9 +30,25 @@ async function run() {
 
     // send result
     const menuCollection = client.db("FoodVozoniDB").collection("menu");
+    const reviewsCollection = client.db("FoodVozoniDB").collection("reviews");
+    const cartCollection = client.db("FoodVozoniDB").collection("carts");
+
     app.get('/menu', async (req, res) => {
       const result = await menuCollection.find().toArray();
       res.send(result)
+    })
+
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewsCollection.find().toArray();
+      res.send(result);
+    })
+
+    // cart collection
+    app.post('/carts', async(req,res) => {
+      const item =req.body;
+      console.log(item);
+      const result  = await cartCollection.insertOne(item);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
